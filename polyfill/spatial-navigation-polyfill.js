@@ -546,6 +546,9 @@
         } else {
             return candidates.filter((candidate) => {
                 const candidateRect = getBoundingClientRect(candidate);
+                if (candidate.nodeName === 'IFRAME' && !candidate.contentDocument) {
+                    return false;
+                }
                 const candidateBody = candidate.nodeName === 'IFRAME' ? candidate.contentDocument.body : null;
                 return (
                     container.contains(candidate) &&
