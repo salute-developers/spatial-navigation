@@ -2022,13 +2022,23 @@ export const setDefaultScrollTo = () => {
 
 // обработчик нажатия `Enter` aka `кнопка OK` на пульте
 document.addEventListener('keyup', (event) => {
+    if (event.keyCode !== 13) {
+        return;
+    }
+    if (!document.activeElement || document.activeElement.disabled) {
+        return;
+    }
+    event.preventDefault();
+    document.activeElement.click();
+});
+
+document.addEventListener('keydown', (event) => {
     if (event.keyCode === 13) {
         if (document.activeElement) {
             const tagName = document.activeElement.tagName;
-            // необходимо обработать этот кейс, т.к. на кнопке событие не должно срабатывать дважды
-            if (tagName !== 'BUTTON' && !document.activeElement.disabled) {
+            // отменяем нативное нажатие на кнопку, т. к. нажатие обработает наш обработчик на keyup
+            if (tagName === 'BUTTON' && !document.activeElement.disabled) {
                 event.preventDefault();
-                document.activeElement.click();
             }
         }
     }
